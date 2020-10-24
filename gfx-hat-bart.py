@@ -75,9 +75,6 @@ def button_press_handler(ch, event):
 
         if current_menu_option == len(menu_options):
             current_menu_option = len(menu_options) - 1
-
-        print(f'current_menu_option = {current_menu_option}')
-        print(f'len(menu_options) = {len(menu_options)}')
     elif ch == 4:
         print(menu_options[current_menu_option].name)
 
@@ -108,7 +105,7 @@ def show_station_picker():
         end_pos = current_menu_option + 4
  
         if end_pos >= len(menu_options):
-            end_pos = len(menu_options) -1
+            end_pos = len(menu_options)
 
         for index in range(start_pos, end_pos):
             x = 7 
