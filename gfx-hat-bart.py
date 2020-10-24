@@ -2,12 +2,29 @@ import os
 import requests
 import atexit
 
-from gfxhat import backlight, lcd
+from gfxhat import backlight, lcd, fonts
+from PIL import Image, ImageFont, ImageDraw
 
 API_BASE = 'http://api.bart.gov/api'
 API_KEY = os.getenv('BART_API_KEY', 'MW9S-E7SL-26DU-VV8V')
 
+width, height = lcd.dimensions()
+font = ImageFont.truetype(fonts.BitbuntuFull, 10)
+image = Image.new('P', (width, height))
+draw = ImageDraw.Draw(image)
+
 stations = {}
+
+class MenuOption:
+    def __init__(self, name, action, options=()):
+        self.name = name
+        self.action = action
+        self.options = options
+        self.size = font.getsize(name)
+        self.width, self.height = self.size
+  
+    def trigger(self):
+        self.action(*self.options)
 
 def cleanup():
     backlight.set_all(0, 0, 0)
@@ -29,11 +46,16 @@ def load_stations():
     for station in response_json['root']['stations']['station']:
         stations[station['abbr']] = station['name']
 
+def show_departures(stationAbbr):
+    print(stationAbbr)
+
 def show_station_picker():
     set_backlight(255, 255, 255)
 
+    menu_options = []
+
     for stationAbbr in stations:
-        print(stations[stationAbbr])
+        menu_options.append(MenuOption(stations[stationAbbr], show_departures, (stationAbbr))) 
 
 atexit.register(cleanup)
 load_stations()
