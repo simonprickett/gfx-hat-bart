@@ -1,6 +1,7 @@
+import atexit
 import os
 import requests
-import atexit
+import time
 
 from gfxhat import backlight, lcd, fonts, touch
 from PIL import Image, ImageFont, ImageDraw
@@ -86,28 +87,27 @@ def show_departures(stationAbbr):
 def show_station_picker():
     set_backlight(255, 255, 255)
 
-    image.paste(0, (0, 0, width, height))
-
     for stationAbbr in stations:
         menu_options.append(MenuOption(stations[stationAbbr], show_departures, (stationAbbr))) 
 
-    for index in range(len(menu_options)):
-        x = 7 
-        y = (index * 12)
-        option = menu_options[index]
-
-        if index == current_menu_option:
-            draw.rectangle(((x - 2, y - 1), (width, y + 10)), 1)
-
-        draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font) 
-
-    w, h = font.getsize('>')
-    draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
-
-    paint_image(image)
+    image.paste(0, (0, 0, width, height))
 
     while True:
-        pass
+        for index in range(len(menu_options)):
+            x = 7 
+            y = (index * 12)
+            option = menu_options[index]
+
+            if index == current_menu_option:
+                draw.rectangle(((x - 2, y - 1), (width, y + 10)), 1)
+
+            draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font) 
+
+        w, h = font.getsize('>')
+        draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
+
+        paint_image(image)
+        time.sleep(1.0 / 30)
 
 atexit.register(cleanup)
 load_stations()
