@@ -76,6 +76,11 @@ def button_press_handler(ch, event):
         if current_menu_option == len(menu_options):
             current_menu_option = len(menu_options) - 1
 
+        print(f'current_menu_option = {current_menu_option}')
+        print(f'len(menu_options) = {len(menu_options)}')
+    elif ch == 4:
+        print(menu_options[current_menu_option].name)
+
 def setup_touch_buttons():
     for x in range(6):
         touch.set_led(x, 0)
@@ -96,8 +101,6 @@ def show_station_picker():
 
         start_pos = current_menu_option - BAR_LOCATION 
 
-        print(f'start_pos -> {start_pos}')
-
         if start_pos < 0:
             line = abs(start_pos)
             start_pos = 0
@@ -108,7 +111,6 @@ def show_station_picker():
             end_pos = len(menu_options) -1
 
         for index in range(start_pos, end_pos):
-            print(index)
             x = 7 
             y = (line * 12)
             option = menu_options[index]
@@ -116,11 +118,9 @@ def show_station_picker():
             if line  == BAR_LOCATION:
                 draw.rectangle(((x - 2, y - 1), (width, y + 10)), 1)
 
-            print(option.name)
             draw.text((x, y), option.name, 0 if line == BAR_LOCATION else 1, font) 
             line += 1
 
-        print('----')
         w, h = font.getsize('>')
         draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
 
