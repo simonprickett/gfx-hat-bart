@@ -14,6 +14,7 @@ image = Image.new('P', (width, height))
 draw = ImageDraw.Draw(image)
 
 stations = {}
+menu_options = []
 current_menu_option = 2
 
 class MenuOption:
@@ -56,8 +57,23 @@ def load_stations():
         stations[station['abbr']] = station['name']
 
 def button_press_handler(ch, event):
-    print(ch)
-    print(event)
+    global current_menu_option
+
+    if event != 'press':
+        return
+
+    if ch == 0:
+        current_menu_option -= 1
+
+        if current_menu_option == -1:
+            current_menu_option = 0
+    elif ch == 1:
+        current_menu_option += 1
+
+        if current_menu_option == len(menu_options):
+            current_menu_option = len(menu_options) - 1
+
+    print(f'current_menu_option = {current_menu_option}')
 
 def setup_touch_buttons():
     for x in range(6):
@@ -69,8 +85,6 @@ def show_departures(stationAbbr):
 
 def show_station_picker():
     set_backlight(255, 255, 255)
-
-    menu_options = []
 
     image.paste(0, (0, 0, width, height))
 
