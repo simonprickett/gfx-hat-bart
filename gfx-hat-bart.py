@@ -37,6 +37,14 @@ def set_backlight(r, g, b):
     backlight.set_all(r, g, b)
     backlight.show()
 
+def paint_image(image):
+    for x in range(width):
+        for y in range(height):
+            pixel = image.getpixel((x, y))
+            lcd.set_pixel(x, y, pixel)
+
+    lcd.show()
+
 def make_api_url(res, cmd):
     return f'{API_BASE}/{res}.aspx?cmd={cmd}&key={API_KEY}&json=y'
 
@@ -73,12 +81,7 @@ def show_station_picker():
     w, h = font.getsize('>')
     draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
 
-    for x in range(width):
-        for y in range(height):
-            pixel = image.getpixel((x, y))
-            lcd.set_pixel(x, y, pixel)
-
-    lcd.show()
+    paint_image(image)
 
     while True:
         pass
