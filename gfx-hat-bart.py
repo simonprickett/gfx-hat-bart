@@ -1,10 +1,23 @@
 import os
 import requests
+import atexit
+
+from gfxhat import backlight, lcd
 
 API_BASE = 'http://api.bart.gov/api'
 API_KEY = os.getenv('BART_API_KEY', 'MW9S-E7SL-26DU-VV8V')
 
 stations = {}
+
+def cleanup():
+    backlight.set_all(0, 0, 0)
+    backlight.show()
+    lcd.clear()
+    lcd.show()
+
+def set_backlight(r, g, b):
+    backlight.set_all(r, g, b)
+    backlight.show()
 
 def make_api_url(res, cmd):
     return f'{API_BASE}/{res}.aspx?cmd={cmd}&key={API_KEY}&json=y'
@@ -17,8 +30,11 @@ def load_stations():
         stations[station['abbr']] = station['name']
 
 def show_station_picker():
+    set_backlight(255, 255, 255)
+
     for stationAbbr in stations:
         print(stations[stationAbbr])
 
+atexit.register(cleanup)
 load_stations()
 show_station_picker()
