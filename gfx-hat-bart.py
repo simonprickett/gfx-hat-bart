@@ -100,11 +100,22 @@ def show_departures(stationAbbr):
     response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
     response_json = response.json()
 
+    departures_by_platform = {}
+
     for etds in response_json['root']['station'][0]['etd']:
         for estimate in etds['estimate']:
-            print(etds['destination'])
-            print(estimate['platform'])
-            print(estimate['minutes'])
+            platform = estimate['platform']
+            departure = {}
+            departure['destination'] = etds['destination']
+            departure['minutes'] = estimate['minutes']
+            print(departure)
+
+            if platform not in departures_by_platform:
+                departures_by_platform[platform] = []
+
+            departures_by_platform[platform].append(departure)
+
+    print(departures_by_platform)
 
 def show_station_picker():
     set_backlight(255, 255, 255)
