@@ -99,7 +99,12 @@ def show_departures(stationAbbr):
     orig = f'orig={stationAbbr}'
     response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
     response_json = response.json()
-    print(response_json['root']['station'][0]['etd'])
+
+    for etds in response_json['root']['station'][0]['etd']:
+        for estimate in etds['estimate']:
+            print(etds['destination'])
+            print(estimate['platform'])
+            print(estimate['minutes'])
 
 def show_station_picker():
     set_backlight(255, 255, 255)
