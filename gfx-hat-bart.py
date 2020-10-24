@@ -3,6 +3,7 @@ import os
 import requests
 import time
 
+from enum import Enum
 from gfxhat import backlight, lcd, fonts, touch
 from PIL import Image, ImageFont, ImageDraw
 
@@ -11,6 +12,11 @@ API_KEY = os.getenv('BART_API_KEY', 'MW9S-E7SL-26DU-VV8V')
 
 BAR_LOCATION = 2
 
+class ApplicationState(Enum):
+    STATION_LIST = 0
+    STATION_DEPARTURES = 1
+
+application_state = ApplicationState.STATION_LIST
 width, height = lcd.dimensions()
 font = ImageFont.truetype(fonts.BitbuntuFull, 10)
 image = Image.new('P', (width, height))
@@ -21,15 +27,15 @@ menu_options = []
 current_menu_option = BAR_LOCATION
 
 class MenuOption:
-    def __init__(self, name, action, options=()):
+    def __init__(self, name, action, abbr):
         self.name = name
         self.action = action
-        self.options = options
+        self.abbr = abbr 
         self.size = font.getsize(name)
         self.width, self.height = self.size
   
     def trigger(self):
-        self.action(*self.options)
+        self.action(self.abbr)
 
 def cleanup():
     backlight.set_all(0, 0, 0)
@@ -76,7 +82,7 @@ def button_press_handler(ch, event):
         if current_menu_option == len(menu_options):
             current_menu_option = len(menu_options) - 1
     elif ch == 4:
-        print(menu_options[current_menu_option].name)
+        menu_options[current_menu_option].trigger()
 
 def setup_touch_buttons():
     for x in range(6):
@@ -90,7 +96,7 @@ def show_station_picker():
     set_backlight(255, 255, 255)
 
     for stationAbbr in stations:
-        menu_options.append(MenuOption(stations[stationAbbr], show_departures, (stationAbbr))) 
+        menu_options.append(MenuOption(stations[stationAbbr], show_departures, stationAbbr)) 
 
     while True:
         line = 0
