@@ -55,8 +55,13 @@ def paint_image(image):
 
     lcd.show()
 
-def make_api_url(res, cmd):
-    return f'{API_BASE}/{res}.aspx?cmd={cmd}&key={API_KEY}&json=y'
+def make_api_url(res, cmd, params = None):
+    api_url = f'{API_BASE}/{res}.aspx?cmd={cmd}&key={API_KEY}&json=y' 
+
+    if params is not None:
+        api_url = f'{api_url}&{params}'
+
+    return api_url
 
 def load_stations():
     response = requests.get(url=f'{make_api_url("stn", "stns")}')
@@ -91,6 +96,10 @@ def setup_touch_buttons():
 
 def show_departures(stationAbbr):
     print(stationAbbr)
+    orig = f'orig={stationAbbr}'
+    response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
+    response_json = response.json()
+    print(response_json['root']['station'][0]['etd'])
 
 def show_station_picker():
     set_backlight(255, 255, 255)
