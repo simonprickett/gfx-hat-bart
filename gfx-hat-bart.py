@@ -62,10 +62,11 @@ def show_station_picker():
     for index in range(len(menu_options)):
         x = 5 
         y = (index * 12)
-        #y = (index * 12) + (height / 2) - 4 - offset_top
-        print(y)
         option = menu_options[index]
         draw.text((x, y), option.name, 1, font) 
+
+    w, h = font.getsize('>')
+    draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
 
     for x in range(width):
         for y in range(height):
