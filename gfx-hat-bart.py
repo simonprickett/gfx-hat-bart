@@ -14,6 +14,7 @@ image = Image.new('P', (width, height))
 draw = ImageDraw.Draw(image)
 
 stations = {}
+current_menu_option = 2
 
 class MenuOption:
     def __init__(self, name, action, options=()):
@@ -60,10 +61,14 @@ def show_station_picker():
         menu_options.append(MenuOption(stations[stationAbbr], show_departures, (stationAbbr))) 
 
     for index in range(len(menu_options)):
-        x = 5 
+        x = 7 
         y = (index * 12)
         option = menu_options[index]
-        draw.text((x, y), option.name, 1, font) 
+
+        if index == current_menu_option:
+            draw.rectangle(((x - 2, y - 1), (width, y + 10)), 1)
+
+        draw.text((x, y), option.name, 0 if index == current_menu_option else 1, font) 
 
     w, h = font.getsize('>')
     draw.text((0, ((height - h) / 2) - 3), '>', 1, font)
