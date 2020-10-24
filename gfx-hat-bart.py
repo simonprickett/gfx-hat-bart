@@ -54,8 +54,27 @@ def show_station_picker():
 
     menu_options = []
 
+    image.paste(0, (0, 0, width, height))
+    offset_top = 0
+
     for stationAbbr in stations:
         menu_options.append(MenuOption(stations[stationAbbr], show_departures, (stationAbbr))) 
+
+    for index in range(len(menu_options)):
+        x = 10
+        y = (index * 12) + (height / 2) - 4 - offset_top
+        option = menu_options[index]
+        draw.text((x, y), option.name, 1, font) 
+
+    for x in range(width):
+        for y in range(height):
+            pixel = image.getpixel((x, y))
+            lcd.set_pixel(x, y, pixel)
+
+    lcd.show()
+
+    while True:
+        pass
 
 atexit.register(cleanup)
 load_stations()
