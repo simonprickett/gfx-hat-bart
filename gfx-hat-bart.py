@@ -2,7 +2,7 @@ import os
 import requests
 import atexit
 
-from gfxhat import backlight, lcd, fonts
+from gfxhat import backlight, lcd, fonts, touch
 from PIL import Image, ImageFont, ImageDraw
 
 API_BASE = 'http://api.bart.gov/api'
@@ -55,6 +55,15 @@ def load_stations():
     for station in response_json['root']['stations']['station']:
         stations[station['abbr']] = station['name']
 
+def button_press_handler(ch, event):
+    print(ch)
+    print(event)
+
+def setup_touch_buttons():
+    for x in range(6):
+        touch.set_led(x, 0)
+        touch.on(x, button_press_handler)
+
 def show_departures(stationAbbr):
     print(stationAbbr)
 
@@ -88,4 +97,5 @@ def show_station_picker():
 
 atexit.register(cleanup)
 load_stations()
+setup_touch_buttons()
 show_station_picker()
