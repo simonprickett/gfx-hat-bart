@@ -123,7 +123,9 @@ def show_departures(stationAbbr):
 
             departures_by_platform[platform].append(departure)
 
-    # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
+    for platform in departures_by_platform:
+        departures_by_platform[platform] = sorted(departures_by_platform[platform], key = lambda k: k['minutes'])
+
     print(departures_by_platform)
 
 def show_station_picker():
