@@ -79,12 +79,12 @@ def button_press_handler(ch, event):
     if event != 'press':
         return
 
-    if ch == 0:
+    if ch == 3:
         current_menu_option -= 1
 
         if current_menu_option == -1:
             current_menu_option = 0
-    elif ch == 1:
+    elif ch == 5:
         current_menu_option += 1
 
         if current_menu_option == len(menu_options):
@@ -98,7 +98,6 @@ def setup_touch_buttons():
         touch.on(x, button_press_handler)
 
 def show_departures(stationAbbr):
-    print(stationAbbr)
     orig = f'orig={stationAbbr}'
     response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
     response_json = response.json()
@@ -118,7 +117,6 @@ def show_departures(stationAbbr):
                 minutes = int(minutes)
 
             departure['minutes'] = minutes
-            print(departure)
 
             if platform not in departures_by_platform:
                 departures_by_platform[platform] = []
