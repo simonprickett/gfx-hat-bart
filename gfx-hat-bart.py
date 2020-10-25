@@ -98,6 +98,10 @@ def setup_touch_buttons():
         touch.on(x, button_press_handler)
 
 def show_departures(stationAbbr):
+    global application_state
+
+    application_state = ApplicationState.STATION_DEPARTURES
+
     orig = f'orig={stationAbbr}'
     response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
     response_json = response.json()
@@ -129,6 +133,8 @@ def show_departures(stationAbbr):
     print(departures_by_platform)
 
 def show_station_picker():
+    global application_state
+
     set_backlight(255, 255, 255)
 
     for stationAbbr in stations:
