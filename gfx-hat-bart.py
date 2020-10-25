@@ -134,7 +134,7 @@ def show_station_picker():
     for stationAbbr in stations:
         menu_options.append(MenuOption(stations[stationAbbr], show_departures, stationAbbr)) 
 
-    while True:
+    while application_state == ApplicationState.STATION_LIST:
         line = 0
         image.paste(0, (0, 0, width, height))
 
