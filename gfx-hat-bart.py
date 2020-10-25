@@ -10,6 +10,8 @@ from PIL import Image, ImageFont, ImageDraw
 API_BASE = 'http://api.bart.gov/api'
 API_KEY = os.getenv('BART_API_KEY', 'MW9S-E7SL-26DU-VV8V')
 
+NO_REAL_TIME_DEPARTURE_STATIONS = [ 'OAKL' ]
+
 BAR_LOCATION = 2
 
 class ApplicationState(Enum):
@@ -68,7 +70,8 @@ def load_stations():
     response_json = response.json()
 
     for station in response_json['root']['stations']['station']:
-        stations[station['abbr']] = station['name']
+        if station['abbr'] not in NO_REAL_TIME_DEPARTURE_STATIONS:
+            stations[station['abbr']] = station['name']
 
 def button_press_handler(ch, event):
     global current_menu_option
