@@ -25,6 +25,7 @@ image = Image.new('P', (width, height))
 draw = ImageDraw.Draw(image)
 
 stations = {}
+station_departures_by_platform = {}
 menu_options = []
 current_menu_option = BAR_LOCATION
 
@@ -79,17 +80,17 @@ def button_press_handler(ch, event):
     if event != 'press':
         return
 
-    if ch == 3:
+    if ch == 3 and application_state == ApplicationState.STATION_LIST:
         current_menu_option -= 1
 
         if current_menu_option == -1:
             current_menu_option = 0
-    elif ch == 5:
+    elif ch == 5 and application_state == ApplicationState.STATION_LIST:
         current_menu_option += 1
 
         if current_menu_option == len(menu_options):
             current_menu_option = len(menu_options) - 1
-    elif ch == 4:
+    elif ch == 4 and application_state == ApplicationState.STATION_LIST:
         menu_options[current_menu_option].trigger()
 
 def setup_touch_buttons():
@@ -131,6 +132,8 @@ def show_departures(stationAbbr):
         departures_by_platform[platform] = sorted(departures_by_platform[platform], key = lambda k: k['minutes'])
 
     print(departures_by_platform)
+
+    # TODO logic to display the results...
 
 def show_station_picker():
     global application_state
