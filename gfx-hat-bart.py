@@ -107,7 +107,14 @@ def show_departures(stationAbbr):
             platform = estimate['platform']
             departure = {}
             departure['destination'] = etds['destination']
-            departure['minutes'] = estimate['minutes']
+            minutes = estimate['minutes']
+
+            if minutes == 'Leaving':
+                minutes = 0
+            else:
+                minutes = int(minutes)
+
+            departure['minutes'] = minutes
             print(departure)
 
             if platform not in departures_by_platform:
@@ -115,6 +122,7 @@ def show_departures(stationAbbr):
 
             departures_by_platform[platform].append(departure)
 
+    # https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
     print(departures_by_platform)
 
 def show_station_picker():
