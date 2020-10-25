@@ -99,7 +99,7 @@ def setup_touch_buttons():
         touch.on(x, button_press_handler)
 
 def show_departures(stationAbbr):
-    global application_state
+    global application_state, station_departures_by_platform
 
     application_state = ApplicationState.STATION_DEPARTURES
 
@@ -107,7 +107,7 @@ def show_departures(stationAbbr):
     response = requests.get(url=f'{make_api_url("etd", "etd", orig)}')
     response_json = response.json()
 
-    departures_by_platform = {}
+    station_departures_by_platform = {}
 
     for etds in response_json['root']['station'][0]['etd']:
         for estimate in etds['estimate']:
@@ -123,15 +123,15 @@ def show_departures(stationAbbr):
 
             departure['minutes'] = minutes
 
-            if platform not in departures_by_platform:
-                departures_by_platform[platform] = []
+            if platform not in station_departures_by_platform:
+                station_departures_by_platform[platform] = []
 
-            departures_by_platform[platform].append(departure)
+            station_departures_by_platform[platform].append(departure)
 
-    for platform in departures_by_platform:
-        departures_by_platform[platform] = sorted(departures_by_platform[platform], key = lambda k: k['minutes'])
+    for platform in station_departures_by_platform:
+        station_departures_by_platform[platform] = sorted(station_departures_by_platform[platform], key = lambda k: k['minutes'])
 
-    print(departures_by_platform)
+    print(station_departures_by_platform)
 
     # TODO logic to display the results...
 
