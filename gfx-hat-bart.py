@@ -26,6 +26,7 @@ draw = ImageDraw.Draw(image)
 
 stations = {}
 station_departures_by_platform = {}
+station_platform_index = 0
 menu_options = []
 current_menu_option = BAR_LOCATION
 
@@ -132,6 +133,18 @@ def show_departures(stationAbbr):
         station_departures_by_platform[platform] = sorted(station_departures_by_platform[platform], key = lambda k: k['minutes'])
 
     print(station_departures_by_platform)
+
+    image.paste(0, (0, 0, width, height))
+
+    line = 0
+    x = 3
+    y = (line * 12)
+
+    draw.text((x, y), 'PLATFORM NUMBER', 1, font)
+    paint_image(image)
+ 
+    while True:
+        pass
 
     # TODO logic to display the results...
 
